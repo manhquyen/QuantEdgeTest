@@ -17,42 +17,37 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  colorText: {
+    color: 'blue',
+  },
 });
 
-let id = 0;
-function createData(code, name, price, value, change, percentChange) {
-  id += 1;
-  return { id, code, name, price, value, change, percentChange };
+function colorChange(value)
+{
+  if(parseFloat(value)<0)
+  {
+    return <label style={{color : 'red'}}>{value}</label>
+  }
+  else
+    return <label style={{ color: 'green' }}>{value}</label>
+
+}
+function colorPercentChange(value)
+{
+  if(parseFloat(value)<0)
+  {
+    return <label style={{color : 'red'}}>{value}%</label>
+  }
+  else
+    return <label style={{ color: 'green' }}>{value}%</label>
+
 }
 
 const data = [
-  createData('CBA.AX','BANK OF AUSTRALIA', 159, 6.0, 24, 4.0),
-  createData('SRX.AX','MEDICAL LIMITED', 237, 9.0, 37, 4.3),
-  createData('ANZ.AX', 'ZEALAND BANKING',262, 16.0, 24, 6.0),
-  createData('BHP.AX', 'BHP BILLION',305, 3.7, 67, 4.3),
-  createData('WBC.AX', 'WESTPAC BANKING',356, 16.0, 49, 3.9),
 ];
 
-
-class SimpleTable extends React.Component {
-  componentDidMount(){
-    setInterval(function(){
-     // console.log(data);
-      fetch("/api/getDatas")
-      .then(res => res.json())
-      .then(
-        (result) =>{
-            console.log(result);
-        },
-        (error) => {
-          console.log("error");
-        }
-      )
-
-    },5000);
-  };
-  render(){
-  const { classes } = this.props;
+function SimpleTable (props) {
+  const { classes } = props;
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -67,10 +62,10 @@ class SimpleTable extends React.Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(n => {
+          {props.dataTable.map(n => {
             return (
               <TableRow key={n.id}>
-                <TableCell component="th" scope="row">
+                <TableCell className={classes.colorText} component="th" scope="row">
                   {n.code}
                 </TableCell>
                 <TableCell component="th" scope="row">
@@ -78,8 +73,8 @@ class SimpleTable extends React.Component {
                 </TableCell>
                 <TableCell numeric>{n.price}</TableCell>
                 <TableCell numeric>{n.value}</TableCell>
-                <TableCell numeric>{n.change}</TableCell>
-                <TableCell numeric>{n.percentChange}</TableCell>
+                <TableCell numeric>{colorChange(n.change)}</TableCell>
+                <TableCell numeric>{colorPercentChange(n.percentChange)}</TableCell>
               </TableRow>
             );
           })}
@@ -88,7 +83,7 @@ class SimpleTable extends React.Component {
     </Paper>
   );
 }
-}
+
 
 SimpleTable.propTypes = {
   classes: PropTypes.object.isRequired,

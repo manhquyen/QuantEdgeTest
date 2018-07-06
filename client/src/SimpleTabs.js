@@ -7,6 +7,9 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import SimpleTable from './SimpleTable';
 
+
+const data = [];
+
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -14,6 +17,7 @@ function TabContainer(props) {
     </Typography>
   );
 }
+
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
@@ -25,16 +29,57 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
   },
 });
+const magrinleft ={
+  marginLeft: 'auto'
+};
+
+const sortTopGainer= (arrayDataTable)=>{
+    arrayDataTable.sort((a,b) => {
+      return b.value - a.value;
+    })
+    return arrayDataTable.slice(0,19);
+}
+const sortTopLoser= (arrayDataTable)=>{
+  arrayDataTable.sort((a,b) => {
+    return a.value - b.value;
+  })
+  return arrayDataTable.slice(0,19);
+}
 
 class SimpleTabs extends React.Component {
-  state = {
-    value: 0,
-  };
+   constructor(props){
+     super(props);
+     this.state={
+       value: 0,
+       dataTable: data};
+   }
 
   handleChange = (event, value) => {
     this.setState({ value });
   };
-
+  componentDidMount(){
+    console.log("componentDidMount");
+     this.intervalId=setInterval(() => {this.loadData()},5000);
+     this.loadData();
+  };
+  componentWillUnmount() {
+    console.log("componentWillUnMount");
+    clearInterval(this.intervalId);
+  }
+  loadData(){
+    fetch("/api/getDatas")
+    .then(res => res.json())
+    .then(
+      (result) =>{
+           this.setState({
+            dataTable: result
+           });
+      },
+      (error) => {
+        console.log("error");
+      }
+    )
+  }
   render() {
     const { classes } = this.props;
     const { value } = this.state;
@@ -42,13 +87,14 @@ class SimpleTabs extends React.Component {
     return (
       <div className={classes.root}>
         <AppBar position="static">
-          <Tabs value={value} onChange={this.handleChange}>
+          <label >S&P/ASX</label>
+          <Tabs  style={magrinleft} value={value} onChange={this.handleChange}>
             <Tab label="TOP GAINERS" />
             <Tab label="TOP LOSERS" />
           </Tabs>
         </AppBar>
-        {value === 0 && <TabContainer><SimpleTable/></TabContainer>}
-        {value === 1 && <TabContainer>Top Losers</TabContainer>}
+        {value === 0 && <TabContainer><SimpleTable dataTable = {sortTopGainer(this.state.dataTable)}/></TabContainer>}
+        {value === 1 && <TabContainer><SimpleTable dataTable = {sortTopLoser(this.state.dataTable)}/></TabContainer>}
       </div>
     );
   }
