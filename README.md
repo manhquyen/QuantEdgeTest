@@ -1,4 +1,4 @@
-#Quant Edge Test
+# Quant Edge Test
 
 Thực hiện project trong vòng 15 ngày
 
@@ -14,7 +14,7 @@ Giai đoạn 3: (6 ngày )
 
 Thực hiện cập nhập dữ liệu lên frontend Thực hiện các chức năng được yêu cầu bao gồm : Tính toán thay đổi và thay đổi màu sắc,sắp xếp và hiển thị tại 2 page Top Gainer ,Top Loser
 
-#Hướng dẫn :
+# Hướng dẫn :
 
 Cài đặt các gói phụ thuộc 
 Vào thu mục project chạy lần lượt các lệnh
@@ -29,9 +29,9 @@ yarn
 yarn dev
 ```
 
-#Tham khảo
-tạo project
+# Tham khảo
+Tạo project
 https://medium.freecodecamp.org/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0
-triển khai app
+Triển khai app
 https://cra-express.herokuapp.com/
 
